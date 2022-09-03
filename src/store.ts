@@ -50,6 +50,17 @@ export const toggleTodoAtom = atom(null, (get, set, id: number) => {
   set(todosAtom, toggleTodo(get(todosAtom), id));
 });
 
-export const EditAtom = atom(null, (get, set, id: number) =>
-  set(todosAtom, updateTodo(get(todosAtom), id, get(newTodoAtom)))
+export const EditAtom = atom(
+  null,
+  (
+    get,
+    set,
+    {
+      id,
+      text,
+    }: {
+      id: number;
+      text: string;
+    }
+  ) => set(todosAtom, updateTodo(get(todosAtom), id, text))
 );
