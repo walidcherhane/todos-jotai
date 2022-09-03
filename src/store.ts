@@ -1,3 +1,5 @@
+import { atom } from "jotai";
+
 // Standard interface and functions
 export interface Todo {
   id: number;
@@ -28,3 +30,26 @@ export const addTodo = (todos: Todo[], text: string): Todo[] => [
     done: false,
   },
 ];
+
+// atoms
+export const newTodoAtom = atom<string>("");
+export const todosAtom = atom<Todo[]>([]);
+export const addNewTodoAtom = atom(
+  (get) => get(todosAtom),
+  (get, set) => {
+    set(todosAtom, addTodo(get(todosAtom), get(newTodoAtom)));
+    set(newTodoAtom, "");
+  }
+);
+
+export const deleteTodoAtom = atom(null, (get, set, id: number) => {
+  set(todosAtom, removeTodo(get(todosAtom), id));
+});
+
+export const toggleTodoAtom = atom(null, (get, set, id: number) => {
+  set(todosAtom, toggleTodo(get(todosAtom), id));
+});
+
+export const EditAtom = atom(null, (get, set, id: number) =>
+  set(todosAtom, updateTodo(get(todosAtom), id, get(newTodoAtom)))
+);
